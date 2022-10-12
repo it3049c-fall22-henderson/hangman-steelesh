@@ -185,15 +185,23 @@ class Hangman {
 
   drawBody() {
     this.ctx.beginPath();
-    this.ctx.fillRect(249, 130, 2, 150);
+    this.ctx.fillRect(249, 130, 2, 125);
     this.ctx.stroke();
   }
 
-  drawLeftArm() {}
+  drawLeftArm() {
+    this.ctx.fillRect(185, 160, 65, 2);
+  }
 
-  drawRightArm() {}
+  drawRightArm() {
+    this.ctx.fillRect(251, 160, 65, 2);
+  }
 
-  drawLeftLeg() {}
+  drawLeftLeg() {
+    this.ctx.fillRect(185, 253, 65, 2);
+  }
 
-  drawRightLeg() {}
+  drawRightLeg() {
+    this.ctx.fillRect(251, 253, 65, 2);
+  }
 }

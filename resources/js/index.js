@@ -36,7 +36,7 @@ try {
       gameWrapper.classList.remove("hidden");
       //       3. call the game getWordHolderText and set it to the wordHolderText
       wordHolderText.innerHTML = game.getWordHolderText();
-      //       4. call the game getGuessessText and set it to the guessesText
+      //       4. call the game getGuessesText and set it to the guessesText
       guessesText.innerHTML = game.getGuessesText();
     });
   });
