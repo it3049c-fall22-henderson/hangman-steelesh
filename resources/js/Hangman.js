@@ -104,11 +104,41 @@ class Hangman {
    * drawHead, drawBody, drawRightArm, drawLeftArm, drawRightLeg, or drawLeftLeg.
    * if the number wrong guesses is 6, then also set isOver to true and didWin to false.
    */
-  onWrongGuess() {}
+  onWrongGuess() {
+    let wrongGuesses = 0;
+    for (let i = 0; i < this.guesses.length; i++) {
+      if (!this.word.includes(this.guesses[i])) {
+        wrongGuesses++;
+      }
+    }
+
+    switch (wrongGuesses) {
+      case 1:
+        this.drawHead();
+        break;
+      case 2:
+        this.drawBody();
+        break;
+      case 3:
+        this.drawLeftArm();
+        break;
+      case 4:
+        this.drawRightArm();
+        break;
+      case 5:
+        this.drawLeftLeg();
+        break;
+      case 6:
+        this.drawRightLeg();
+        this.isOver = true;
+        this.didWin = false;
+        break;
+    }
+  }
 
   /**
    * This function will return a string of the word placeholder
-   * It will have underscores in the correct number and places of the unguessed letters.
+   * It will have underscores in the correct number and places of the un-guessed letters.
    * i.e.: if the word is BOOK, and the letter O has been guessed, this would return _ O O _
    */
   getWordHolderText() {
@@ -116,7 +146,7 @@ class Hangman {
   }
 
   /**
-   * This function returns a string of all the previous guesses, seperated by a comma
+   * This function returns a string of all the previous guesses, separated by a comma
    * This would return something that looks like
    * (Guesses: A, B, C)
    * Hint: use the Array.prototype.join method.
