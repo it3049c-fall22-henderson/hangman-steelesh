@@ -19,7 +19,7 @@ class Hangman {
    * */
   getRandomWord(difficulty) {
     return fetch(
-      `https://hangman-micro-service-bpblrjerwh.now.sh?difficulty=${difficulty}`
+      `https://hangman-micro-service.herokuapp.com/?difficulty=${difficulty}`
     )
       .then((r) => r.json())
       .then((r) => r.word);
@@ -30,9 +30,9 @@ class Hangman {
    * @param {string} difficulty a difficulty string to be passed to the getRandomWord Function
    * @param {function} next callback function to be called after a word is reveived from the API.
    */
-  start(difficulty, next) {
+  async start(difficulty, next) {
     // get word and set it to the class's this.word
-    this.word = this.getRandomWord(difficulty);
+    this.word = await this.getRandomWord(difficulty);
     // clear canvas
     this.clearCanvas();
     // draw base
@@ -43,6 +43,7 @@ class Hangman {
     this.isOver = false;
     // reset this.didWin to false
     this.didWin = false;
+    next();
   }
 
   /**
@@ -52,17 +53,20 @@ class Hangman {
   guess(letter) {
     // Check if nothing was provided and throw an error if so
     if (letter === "") {
-      throw Error("You must provide a letter : 'Input can not be null'");
+      alert("You must provide a letter - Input can not be null");
+      throw Error("You must provide a letter - Input can not be null");
     }
     // Check for invalid cases (numbers, symbols, ...) throw an error if it is
     if (!/^[a-zA-Z]*$/g.test(letter)) {
+      alert(`You must provide a letter - "${letter}" is not a valid input`);
       throw Error(
-        `You must provide a letter: '${letter} is not a valid input'`
+        `You must provide a letter - "${letter}" is not a valid input`
       );
     }
     // Check if more than one letter was provided. throw an error if it is.
     if (letter.length > 1) {
-      throw Error(`Must provide ONE letter: '${letter} is not a valid input'`);
+      alert(`Must provide ONE letter - "${letter}" is not a valid input`);
+      throw Error(`Must provide ONE letter - "${letter}" is not a valid input`);
     }
     // if it's a letter, convert it to lower case for consistency.
     letter = letter.toLowerCase();
@@ -111,28 +115,21 @@ class Hangman {
         wrongGuesses++;
       }
     }
-
-    switch (wrongGuesses) {
-      case 1:
-        this.drawHead();
-        break;
-      case 2:
-        this.drawBody();
-        break;
-      case 3:
-        this.drawLeftArm();
-        break;
-      case 4:
-        this.drawRightArm();
-        break;
-      case 5:
-        this.drawLeftLeg();
-        break;
-      case 6:
-        this.drawRightLeg();
-        this.isOver = true;
-        this.didWin = false;
-        break;
+    if (wrongGuesses === 1) {
+      this.drawHead();
+    } else if (wrongGuesses === 2) {
+      this.drawBody();
+    } else if (wrongGuesses === 3) {
+      this.drawLeftArm();
+    } else if (wrongGuesses === 4) {
+      this.drawRightArm();
+    } else if (wrongGuesses === 5) {
+      this.drawLeftLeg();
+    } else if (wrongGuesses === 6) {
+      this.drawRightLeg();
+      this.isOver = true;
+      this.didWin = false;
+      console.log("Loss");
     }
   }
 
@@ -180,9 +177,17 @@ class Hangman {
     this.ctx.fillRect(10, 410, 175, 10); // Base
   }
 
-  drawHead() {}
+  drawHead() {
+    this.ctx.beginPath();
+    this.ctx.arc(250, 95, 35, 0, Math.PI * 2, false);
+    this.ctx.stroke();
+  }
 
-  drawBody() {}
+  drawBody() {
+    this.ctx.beginPath();
+    this.ctx.fillRect(249, 130, 2, 150);
+    this.ctx.stroke();
+  }
 
   drawLeftArm() {}
 

@@ -11,7 +11,7 @@ const wordHolderText = document.getElementById(`wordHolder`);
 // GUESSING FORM
 const guessForm = document.getElementById(`guessForm`);
 const guessInput = document.getElementById(`guessInput`);
-
+const guessButton = document.getElementById(`guessSubmitButton`);
 // GAME RESET BUTTON
 const resetGame = document.getElementById(`resetGame`);
 
@@ -21,7 +21,7 @@ let canvas = document.getElementById(`hangmanCanvas`);
 // The following Try-Catch Block will catch the errors thrown
 try {
   // Instantiate a game Object using the Hangman class.
-  game = new Hangman(canvas);
+  const game = new Hangman(canvas);
   // add a submit Event Listener for the to the difficultySelectionForm
   difficultySelectForm.addEventListener(`submit`, function (event) {
     event.preventDefault();
@@ -35,9 +35,9 @@ try {
       //       2. show the gameWrapper
       gameWrapper.classList.remove("hidden");
       //       3. call the game getWordHolderText and set it to the wordHolderText
-      wordHolderText.innerHTML += game.getWordHolderText();
+      wordHolderText.innerHTML = game.getWordHolderText();
       //       4. call the game getGuessessText and set it to the guessesText
-      guessesText.innerHTML += game.getGuessesText();
+      guessesText.innerHTML = game.getGuessesText();
     });
   });
 
@@ -49,9 +49,9 @@ try {
     //    call the game guess() method
     game.guess(input);
     //    set the wordHolderText to the game.getHolderText
-    wordHolderText.innerHTML = game.getWordHolderText;
+    wordHolderText.innerHTML = game.getWordHolderText();
     //    set the guessesText to the game.getGuessesText
-    guessesText.innerHTML = game.getGuessesText;
+    guessesText.innerHTML = game.getGuessesText();
     //    clear the guess input field
     guessInput.value = "";
     // Given the Guess Function calls either the checkWin or the onWrongGuess methods
@@ -65,20 +65,23 @@ try {
       //      3. show the resetGame button
       resetGame.classList.remove("hidden");
       // if the game is won or lost, show an alert.
-      if (game.didWin) {
+      if (game.didWin === true) {
         alert("Congratulations! You won the game!");
       } else {
         alert("Sorry, you lost!");
       }
     }
   });
+
   // add a click Event Listener to the resetGame button
-  //    show the startWrapper
-  //    hide the gameWrapper
   resetGame.addEventListener(`click`, function (e) {
     e.preventDefault();
+    //    show the startWrapper
     startWrapper.classList.remove("hidden");
+    //    hide the gameWrapper
     gameWrapper.classList.add("hidden");
+    // Reset previous game stats
+    location.reload();
   });
 } catch (error) {
   console.error(error);
