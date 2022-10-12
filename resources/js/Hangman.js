@@ -142,7 +142,15 @@ class Hangman {
    * i.e.: if the word is BOOK, and the letter O has been guessed, this would return _ O O _
    */
   getWordHolderText() {
-    return;
+    let placeholder = "";
+    for (let i = 0; i < this.word.length; i++) {
+      if (this.guesses.includes(this.word[i]) === true) {
+        placeholder += `${this.word[i]} `;
+      } else {
+        placeholder += "_ ";
+      }
+    }
+    return placeholder;
   }
 
   /**
