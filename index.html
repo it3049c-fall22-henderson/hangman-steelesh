@@ -8,18 +8,55 @@
                 display: none;
             }
         </style>
+        <link rel="stylesheet" href="./resources/css/styles.css" />
+        <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+            integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+            crossorigin="anonymous"
+        />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     </head>
 
     <body>
         <h1>Hangman</h1>
         <div id="startWrapper">
+            <form id="nameInput">
+                <label for="my-name-input">Name*</label>
+                <input
+                    id="my-name-input"
+                    type="text"
+                    class="form-control"
+                    placeholder="ex. John Doe"
+                />
+                <input
+                    type="button"
+                    value="Save"
+                    class="btn btn-outline-primary"
+                    id="save"
+                    disabled="true"
+                />
+            </form>
             <form id="difficultySelect">
-                <select id="difficulty">
+                <label for="difficulty">Difficulty*</label>
+                <select id="difficulty" class="form-control" disabled="true">
+                    <option
+                        disabled="true"
+                        selected="selected"
+                        value="Select Difficulty"
+                    >
+                        Select Difficulty
+                    </option>
                     <option value="easy">Easy</option>
                     <option value="medium">Medium</option>
                     <option value="hard">Hard</option>
                 </select>
-                <input type="submit" value="Start!" />
+                <input
+                    type="button"
+                    value="START GAME"
+                    class="btn btn-outline-primary"
+                    id="start"
+                />
             </form>
         </div>
         <div id="gameWrapper" class="hidden">
