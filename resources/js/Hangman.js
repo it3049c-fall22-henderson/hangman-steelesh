@@ -9,7 +9,7 @@ class Hangman {
   }
 
   /**
-   * This function takes a difficulty string as a patameter
+   * This function takes a difficulty string as a parameter
    * would use the Fetch API to get a random word from the Hangman
    * To get an easy word: https://hangman-micro-service-bpblrjerwh.now.sh?difficulty=easy
    * To get an medium word: https://hangman-micro-service-bpblrjerwh.now.sh?difficulty=medium
@@ -32,11 +32,17 @@ class Hangman {
    */
   start(difficulty, next) {
     // get word and set it to the class's this.word
+    this.word = this.getRandomWord(difficulty);
     // clear canvas
+    this.clearCanvas();
     // draw base
+    this.drawBase();
     // reset this.guesses to empty array
+    this.guesses = [];
     // reset this.isOver to false
+    this.isOver = false;
     // reset this.didWin to false
+    this.didWin = false;
   }
 
   /**
