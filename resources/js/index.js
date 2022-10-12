@@ -42,28 +42,44 @@ try {
   });
 
   // add a submit Event Listener to the guessForm
-  guessForm.addEventListener(`submit`, function (event) {
-    event.preventDefault();
+  guessForm.addEventListener(`submit`, function (e) {
+    e.preventDefault();
     //    get the guess input
+    let input = guessInput.value;
     //    call the game guess() method
+    game.guess(input);
     //    set the wordHolderText to the game.getHolderText
+    wordHolderText.innerHTML = game.getWordHolderText;
     //    set the guessesText to the game.getGuessesText
+    guessesText.innerHTML = game.getGuessesText;
     //    clear the guess input field
+    guessInput.value = "";
     // Given the Guess Function calls either the checkWin or the onWrongGuess methods
     // the value of the isOver and didWin would change after calling the guess() function.
     // Check if the game isOver:
-    //      1. disable the guessInput
-    //      2. disable the guessButton
-    //      3. show the resetGame button
-    // if the game is won or lost, show an alert.
+    if (game.isOver === true) {
+      //      1. disable the guessInput
+      guessInput.disabled = true;
+      //      2. disable the guessButton
+      guessButton.disabled = true;
+      //      3. show the resetGame button
+      resetGame.classList.remove("hidden");
+      // if the game is won or lost, show an alert.
+      if (game.didWin) {
+        alert("Congratulations! You won the game!");
+      } else {
+        alert("Sorry, you lost!");
+      }
+    }
   });
-
-  guessForm.addEventListener(`submit`, function (e) {});
-
   // add a click Event Listener to the resetGame button
   //    show the startWrapper
   //    hide the gameWrapper
-  resetGame.addEventListener(`click`, function (e) {});
+  resetGame.addEventListener(`click`, function (e) {
+    e.preventDefault();
+    startWrapper.classList.remove("hidden");
+    gameWrapper.classList.add("hidden");
+  });
 } catch (error) {
   console.error(error);
   alert(error);
