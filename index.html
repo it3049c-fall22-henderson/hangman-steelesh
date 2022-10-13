@@ -3,11 +3,6 @@
     <head>
         <meta charset="UTF-8" />
         <title>Hangman Game Demo</title>
-        <style>
-            .hidden {
-                display: none;
-            }
-        </style>
         <link rel="stylesheet" href="./resources/css/styles.css" />
         <link
             rel="stylesheet"
@@ -17,7 +12,6 @@
         />
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     </head>
-
     <body>
         <h1>Hangman</h1>
         <div id="startWrapper">
@@ -27,12 +21,13 @@
                     id="my-name-input"
                     type="text"
                     class="form-control"
-                    placeholder="ex. John Doe"
+                    placeholder='Ex. "John"'
+                    ;
                 />
                 <input
                     type="button"
                     value="Save"
-                    class="btn btn-outline-primary"
+                    class="btn btn-primary"
                     id="save"
                     disabled="true"
                 />
@@ -51,38 +46,65 @@
                     <option value="medium">Medium</option>
                     <option value="hard">Hard</option>
                 </select>
-                <input
+                <div class="container">
+                    <input
+                        type="button"
+                        value="Play"
+                        class="btn btn-primary"
+                        id="start"
+                        disabled="true"
+                    />
+                    <input
+                        type="button"
+                        value="Reset"
+                        class="btn btn-danger"
+                        id="reset"
+                        disabled="true"
+                    />
+                </div>
+            </form>
+        </div>
+        <div id="gameWrapper" style="display: none">
+            <div class="gameContainer">
+                <div id="guesses"></div>
+                <div class="canvasContainer">
+                    <canvas
+                        id="hangmanCanvas"
+                        height="420"
+                        width="450"
+                    ></canvas>
+                    <div id="wordHolder"></div>
+                </div>
+                <form id="guessForm">
+                    <input
+                        type="text"
+                        id="guessInput"
+                        style="text-transform: uppercase"
+                        onkeypress="limitKeypress(event,this.value,1)"
+                    />
+                    <input
+                        type="submit"
+                        id="guessSubmitButton"
+                        value="Guess"
+                        class="btn btn-primary"
+                        disabled="true"
+                    />
+                </form>
+            </div>
+            <div class="buttonContainer">
+                <button
                     type="button"
-                    value="START GAME"
-                    class="btn btn-outline-primary"
-                    id="start"
-                />
-            </form>
+                    id="resetGame"
+                    class="btn btn-primary"
+                    style="visibility: hidden"
+                >
+                    Play Again
+                </button>
+                <button type="button" id="exitGame" class="btn btn-danger">
+                    Exit To Menu
+                </button>
+            </div>
         </div>
-        <div id="gameWrapper" class="hidden">
-            <form id="guessForm">
-                <input
-                    type="text"
-                    id="guessInput"
-                    placeholder="Guess a letter!"
-                />
-                <input type="submit" id="guessSubmitButton" value="Guess" />
-            </form>
-            <div id="guesses"></div>
-            <br />
-            <div id="wordHolder"></div>
-            <br />
-            <canvas
-                id="hangmanCanvas"
-                height="500"
-                width="350"
-                style="border: 1px solid black"
-            ></canvas>
-            <button type="button" id="resetGame" class="hidden">
-                Play Again!
-            </button>
-        </div>
-
         <script src="resources/js/Hangman.js" type="text/javascript"></script>
         <script src="resources/js/index.js" type="text/javascript"></script>
     </body>

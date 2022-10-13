@@ -13,6 +13,8 @@ const nameInput = document.getElementById(`my-name-input`);
 const saveNameForm = document.getElementById(`nameInput`);
 const saveNameBtn = document.getElementById(`save`);
 const startGameBtn = document.getElementById(`start`);
+const resetInfoBtn = document.getElementById(`reset`);
+const exitGameBtn = document.getElementById(`exitGame`);
 
 try {
   const game = new Hangman(canvas);
@@ -20,13 +22,18 @@ try {
   $(nameInput).keyup(function () {
     if ($(this).val().length != 0) {
       saveNameBtn.disabled = false;
-      saveNameBtn.style.backgroundColor = "#007BFF";
-      saveNameBtn.style.color = "#fff";
+      resetInfoBtn.disabled = false;
     } else {
       saveNameBtn.disabled = true;
-      saveNameBtn.style.backgroundColor = "#fff";
-      saveNameBtn.border = "1px solid gray";
-      saveNameBtn.style.color = "gray";
+      resetInfoBtn.disabled = true;
+    }
+  });
+
+  $(guessInput).keyup(function () {
+    if ($(this).val().length != 0) {
+      guessButton.disabled = false;
+    } else {
+      guessButton.disabled = true;
     }
   });
   saveNameBtn.addEventListener(`click`, function (event) {
@@ -40,26 +47,34 @@ try {
       );
     } else {
       sessionStorage.setItem("Name", nameInput.value);
-      nameInput.innerHTML = nameInput.value;
+      nameInput.innerHTML = sessionStorage.getItem("Name");
       saveNameBtn.value = "Saved!";
-      saveNameBtn.style.color = "white";
+      saveNameBtn.style.color = "#F5F5F5";
       saveNameBtn.style.backgroundColor = "#28A745";
-      saveNameBtn.style.border = "1px solid gray";
       difficultySelect.disabled = false;
       $(nameInput).keyup(function () {
-        if ($(this).val().length != 0) {
-          saveNameBtn.value = `Modify current name (${sessionStorage.getItem(
+        if ($(this).val() == `${sessionStorage.getItem("Name")}`) {
+          saveNameBtn.value = "Saved!";
+          saveNameBtn.style.color = "#F5F5F5";
+          saveNameBtn.style.backgroundColor = "#28A745";
+          saveNameBtn.disabled = true;
+          difficultySelect.disabled = false;
+        } else if (
+          $(this).val().length != 0 &&
+          $(this).val().value !== `${sessionStorage.getItem("Name")}`
+        ) {
+          saveNameBtn.value = `Modify Current Name\n${sessionStorage.getItem(
             "Name"
-          )})`;
+          )} ⟶ ${$(this).val()}`;
           saveNameBtn.style.backgroundColor = "#FFC107";
-          saveNameBtn.style.color = "#fff";
+          saveNameBtn.style.color = "#000";
           difficultySelect.value = "Select Difficulty";
           difficultySelect.disabled = true;
           startGameBtn.disabled = true;
         } else {
           saveNameBtn.value = "modify";
           saveNameBtn.disabled = true;
-          saveNameBtn.style.backgroundColor = "#fff";
+          saveNameBtn.style.backgroundColor = "#F5F5F5";
           saveNameBtn.border = "1px solid gray";
           saveNameBtn.style.color = "gray";
           difficultySelect.value = "Select Difficulty";
@@ -67,6 +82,9 @@ try {
           startGameBtn.disabled = true;
         }
       });
+    }
+    if ((saveNameBtn.value = "Saved!")) {
+      saveNameBtn.disabled = true;
     }
   });
 
@@ -87,7 +105,6 @@ try {
         break;
     }
   });
-
   startGameBtn.addEventListener(`click`, function (event) {
     if (
       difficultySelect.selectedIndex === 0 &&
@@ -102,16 +119,21 @@ try {
       alert(`Must select a game difficulty`);
       throw Error(`Must select a game difficulty`);
     } else {
+      sessionStorage.setItem("Difficulty", difficultySelect.value);
       event.preventDefault();
       let gameDifficulty = difficultySelect.value;
       game.start(gameDifficulty, function () {
         event.preventDefault();
-        startWrapper.classList.add("hidden");
-        gameWrapper.classList.remove("hidden");
+        startWrapper.style.display = "none";
+        gameWrapper.style.display = "block";
         wordHolderText.innerHTML = game.getWordHolderText();
         guessesText.innerHTML = game.getGuessesText();
       });
     }
+  });
+  resetInfoBtn.addEventListener(`click`, function (e) {
+    e.preventDefault();
+    location.reload();
   });
   // add a submit Event Listener to the guessForm
   guessForm.addEventListener(`submit`, function (e) {
@@ -131,39 +153,84 @@ try {
     // Check if the game isOver:
     if (game.isOver === true) {
       //      1. disable the guessInput
+      guessInput.placeholder = "";
       guessInput.disabled = true;
       //      2. disable the guessButton
       guessButton.disabled = true;
       //      3. show the resetGame button
-      resetGame.classList.remove("hidden");
+      resetGame.style.visibility = "visible";
       // if the game is won or lost, show an alert.
       if (game.didWin === true) {
-        alert("Congratulations! You won the game!");
+        alert(
+          `Congratulations! You won the game!\nYou guessed the word '${sessionStorage.getItem(
+            "Word"
+          )}' correctly`
+        );
       } else {
-        alert("Sorry, you lost!");
+        alert(
+          `Sorry, you lost!\n'${sessionStorage.getItem(
+            "Word"
+          )}' was the word to guess!`
+        );
       }
     }
   });
-
-  // add a click Event Listener to the resetGame button
   resetGame.addEventListener(`click`, function (e) {
     e.preventDefault();
-    //    show the startWrapper
-    startWrapper.classList.remove("hidden");
-    //    hide the gameWrapper
-    gameWrapper.classList.add("hidden");
-    // Reset previous game stats
-    location.reload();
+    guessInput.disabled = false;
+    guessButton.disabled = false;
+    nameInput.value = sessionStorage.getItem("Name");
+    saveNameBtn.disabled = true;
+    guessInput.placeholder = "";
+    let gameDifficulty = sessionStorage.getItem("Difficulty");
+    game.start(gameDifficulty, function () {
+      e.preventDefault();
+      wordHolderText.innerHTML = game.getWordHolderText();
+      guessesText.innerHTML = game.getGuessesText();
+    });
   });
 } catch (error) {
   console.error(error);
   alert(error);
 }
 window.onload = function () {
+  sessionStorage.clear();
+  difficultySelect.selectedIndex = 0;
+  nameInput.value = "";
+  saveNameBtn.value = "Save";
+  saveNameBtn.disabled = true;
+  resetInfoBtn.disabled = true;
+  startGameBtn.disabled = true;
   difficultySelect.selectedIndex = 0;
   difficultySelect.disabled = true;
-  saveNameBtn.disabled = true;
-  startGameBtn.disabled = true;
   nameInput.value = "";
-  sessionStorage.clear();
+  guessInput.value = "";
 };
+function limitKeypress(event, value, maxLength) {
+  if (value != undefined && value.toString().length >= maxLength) {
+    event.preventDefault();
+  }
+}
+guessInput.addEventListener("keypress", function (event) {
+  // If the user presses the "Enter" key on the keyboard
+  if (event.key === "Enter") {
+    // Cancel the default action, if needed
+    event.preventDefault();
+    // Trigger the button element with a click
+    guessButton.click();
+  }
+});
+nameInput.addEventListener("keypress", function (event) {
+  // If the user presses the "Enter" key on the keyboard
+  if (event.key === "Enter") {
+    // Cancel the default action, if needed
+    event.preventDefault();
+    // Trigger the button element with a click
+    saveNameBtn.click();
+  }
+});
+
+exitGameBtn.addEventListener(`click`, function (e) {
+  e.preventDefault();
+  location.reload();
+});

@@ -19,7 +19,7 @@ class Hangman {
    * */
   getRandomWord(difficulty) {
     return fetch(
-      `https://hangman-micro-service.herokuapp.com/?difficulty=${difficulty}`
+      `https://hangman-micro-service.herokuapp.com/?difficulty=${difficulty}`.toUpperCase()
     )
       .then((r) => r.json())
       .then((r) => r.word);
@@ -33,6 +33,7 @@ class Hangman {
   async start(difficulty, next) {
     // get word and set it to the class's this.word
     this.word = await this.getRandomWord(difficulty);
+    sessionStorage.setItem("Word", this.word);
     // clear canvas
     this.clearCanvas();
     // draw base
@@ -129,7 +130,6 @@ class Hangman {
       this.drawRightLeg();
       this.isOver = true;
       this.didWin = false;
-      console.log("Loss");
     }
   }
 
@@ -142,12 +142,12 @@ class Hangman {
     let placeholder = "";
     for (let i = 0; i < this.word.length; i++) {
       if (this.guesses.includes(this.word[i]) === true) {
-        placeholder += `${this.word[i]} `;
+        placeholder += `${this.word[i]}`;
       } else {
         placeholder += "_ ";
       }
     }
-    return placeholder;
+    return placeholder.toUpperCase();
   }
 
   /**
@@ -157,9 +157,8 @@ class Hangman {
    * Hint: use the Array.prototype.join method.
    */
   getGuessesText() {
-    return `Guesses: ${this.guesses.join(", ")}`;
+    return `Letters Guessed:<br/>${this.guesses.join("   ").toUpperCase()}`;
   }
-
   /**
    * Clears the canvas
    */
