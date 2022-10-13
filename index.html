@@ -2,6 +2,10 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+        />
         <title>Hangman Game Demo</title>
         <link rel="stylesheet" href="./resources/css/styles.css" />
         <link
@@ -46,7 +50,7 @@
                     <option value="medium">Medium</option>
                     <option value="hard">Hard</option>
                 </select>
-                <div class="container">
+                <div class="buttonContainer">
                     <input
                         type="button"
                         value="Play"
@@ -70,8 +74,8 @@
                 <div class="canvasContainer">
                     <canvas
                         id="hangmanCanvas"
-                        height="420"
-                        width="450"
+                        height="420px"
+                        width="450px"
                     ></canvas>
                     <div id="wordHolder"></div>
                 </div>
@@ -98,10 +102,10 @@
                     class="btn btn-primary"
                     style="visibility: hidden"
                 >
-                    Play Again
+                    Again
                 </button>
                 <button type="button" id="exitGame" class="btn btn-danger">
-                    Exit To Menu
+                    Menu
                 </button>
             </div>
         </div>

@@ -19,7 +19,7 @@ class Hangman {
    * */
   getRandomWord(difficulty) {
     return fetch(
-      `https://hangman-micro-service.herokuapp.com/?difficulty=${difficulty}`.toUpperCase()
+      `https://hangman-micro-service.herokuapp.com/?difficulty=${difficulty}`
     )
       .then((r) => r.json())
       .then((r) => r.word);
@@ -28,7 +28,7 @@ class Hangman {
   /**
    *
    * @param {string} difficulty a difficulty string to be passed to the getRandomWord Function
-   * @param {function} next callback function to be called after a word is reveived from the API.
+   * @param {function} next callback function to be called after a word is received from the API.
    */
   async start(difficulty, next) {
     // get word and set it to the class's this.word
@@ -157,7 +157,7 @@ class Hangman {
    * Hint: use the Array.prototype.join method.
    */
   getGuessesText() {
-    return `Letters Guessed:<br/>${this.guesses.join("   ").toUpperCase()}`;
+    return `Letters Guessed: ${this.guesses.join("   ").toUpperCase()}`;
   }
   /**
    * Clears the canvas

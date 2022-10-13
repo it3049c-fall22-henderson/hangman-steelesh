@@ -29,6 +29,7 @@ h1 {
   text-align: center;
 }
 #startWrapper {
+  padding-bottom: 3rem;
   margin: auto;
   display: flex;
   width: 80%;
@@ -62,24 +63,6 @@ h1 {
   display: flex;
   justify-content: space-evenly;
 }
-#start {
-  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
-    "Lucida Sans Unicode", Verdana, sans-serif;
-  align-self: center;
-  font-size: 2rem;
-  width: 20%;
-  margin-top: 5rem;
-  margin-bottom: 3rem;
-}
-#reset {
-  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
-    "Lucida Sans Unicode", Verdana, sans-serif;
-  align-self: center;
-  font-size: 2rem;
-  width: 20%;
-  margin-top: 5rem;
-  margin-bottom: 3rem;
-}
 #gameWrapper {
   margin: auto;
   width: 80%;
@@ -94,7 +77,7 @@ h1 {
 .gameContainer {
   margin: auto;
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-between;
   align-items: center;
 }
 .canvasContainer {
@@ -108,9 +91,8 @@ h1 {
   height: 4rem;
   font-size: 4rem;
   text-align: center;
-  font-family: Courier, monospace;
   font-weight: 500;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 }
 #guessForm {
   display: flex;
@@ -122,10 +104,10 @@ h1 {
 }
 #wordHolder {
   text-align: center;
-  font-size: clamp(3rem, 3vw + 1rem, 4.5rem);
+  font-size: clamp(0.75rem, 2vw + 1rem, 3.125rem);
 }
 #hangmanCanvas {
-  margin-top: 3rem;
+  margin-top: 0.5rem;
   margin-left: auto;
   margin-right: auto;
 }
@@ -134,19 +116,123 @@ h1 {
   align-self: flex-start;
   margin-top: 2rem;
   margin-left: 2rem;
-  font-size: clamp(0.375rem, 4vw - 0.75rem, 1.063rem);
+  font-size: clamp(0.75rem, 1vw + 0.5rem, 1.5rem);
 }
 .buttonContainer {
+  width: 100%;
   display: flex;
   justify-content: space-around;
-  align-items: center;
 }
 #resetGame {
-  width: 20%;
-  margin-top: 2.9rem;
+  width: 30%;
+  margin-top: 5rem;
+  font-size: clamp(0.75rem, 1vw + 0.5rem, 1.5rem);
 }
 #exitGame {
-  width: 20%;
+  width: 30%;
   padding: 0.5rem;
-  margin-top: 2.9rem;
+  margin-top: 5rem;
+  font-size: clamp(0.75rem, 1vw + 0.5rem, 1.5rem);
+}
+#start {
+  width: 30%;
+  padding: 0.5rem;
+  margin-top: 1rem;
+  font-size: clamp(0.75rem, 1vw + 0.5rem, 1.5rem);
+}
+#reset {
+  width: 30%;
+  padding: 0.5rem;
+  margin-top: 1rem;
+  font-size: clamp(0.75rem, 1vw + 0.5rem, 1.5rem);
+}
+
+@media only screen and (max-width: 1600px) {
+  #guesses {
+    order: 3;
+  }
+  #guessForm {
+    margin-top: 5rem;
+    order: 2;
+    width: 100%;
+  }
+  #guessInput {
+    margin-top: 3rem;
+    width: 3rem;
+    height: 3rem;
+    font-size: 2rem;
+    text-align: center;
+    font-weight: 500;
+    margin-bottom: 1rem;
+  }
+  #hangmanCanvas {
+    height: 375px;
+    width: 400px;
+  }
+  .gameContainer {
+    margin-top: 3rem;
+    flex-direction: column;
+  }
+  .canvasContainer {
+    order: 1;
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  #gameWrapper {
+    height: 75%;
+  }
+}
+
+@media only screen and (max-width: 950px) {
+  #guessInput {
+    margin-top: 2rem;
+    width: 3rem;
+    height: 3rem;
+    font-size: 2rem;
+    text-align: center;
+    font-weight: 500;
+    margin-bottom: 1rem;
+  }
+  #guessForm {
+    margin-top: 0;
+  }
+  .gameContainer {
+    margin-top: 2rem;
+  }
+  #wordHolder {
+    width: 100%;
+  }
+  #gameWrapper {
+    height: 75%;
+  }
+  #guesses {
+    margin-top: 0.5rem;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  h1 {
+    padding-top: 1rem;
+  }
+  #guessInput {
+    margin-top: 1rem;
+    width: 2rem;
+    height: 2rem;
+    font-size: 1rem;
+    text-align: center;
+    font-weight: 500;
+    margin-bottom: 1rem;
+  }
+  #hangmanCanvas {
+    height: 225px;
+    width: 250px;
+  }
+}
+@media only screen and (max-width: 400px) {
+  #hangmanCanvas {
+    height: 125px;
+    width: 150px;
+  }
 }
