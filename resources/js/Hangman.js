@@ -9,7 +9,7 @@ class Hangman {
   }
 
   /**
-   * This function takes a difficulty string as a patameter
+   * This function takes a difficulty string as a parameter
    * would use the Fetch API to get a random word from the Hangman
    * To get an easy word: https://hangman-micro-service-bpblrjerwh.now.sh?difficulty=easy
    * To get an medium word: https://hangman-micro-service-bpblrjerwh.now.sh?difficulty=medium
@@ -19,7 +19,7 @@ class Hangman {
    * */
   getRandomWord(difficulty) {
     return fetch(
-      `https://hangman-micro-service-bpblrjerwh.now.sh?difficulty=${difficulty}`
+      `https://hangman-micro-service.herokuapp.com/?difficulty=${difficulty}`
     )
       .then((r) => r.json())
       .then((r) => r.word);
@@ -28,15 +28,23 @@ class Hangman {
   /**
    *
    * @param {string} difficulty a difficulty string to be passed to the getRandomWord Function
-   * @param {function} next callback function to be called after a word is reveived from the API.
+   * @param {function} next callback function to be called after a word is received from the API.
    */
-  start(difficulty, next) {
+  async start(difficulty, next) {
     // get word and set it to the class's this.word
+    this.word = await this.getRandomWord(difficulty);
+    sessionStorage.setItem("Word", this.word);
     // clear canvas
+    this.clearCanvas();
     // draw base
+    this.drawBase();
     // reset this.guesses to empty array
+    this.guesses = [];
     // reset this.isOver to false
+    this.isOver = false;
     // reset this.didWin to false
+    this.didWin = false;
+    next();
   }
 
   /**
@@ -45,19 +53,55 @@ class Hangman {
    */
   guess(letter) {
     // Check if nothing was provided and throw an error if so
+    if (letter === "") {
+      alert("You must provide a letter - Input can not be null");
+      throw Error("You must provide a letter - Input can not be null");
+    }
     // Check for invalid cases (numbers, symbols, ...) throw an error if it is
+    if (!/^[a-zA-Z]*$/g.test(letter)) {
+      alert(`You must provide a letter - "${letter}" is not a valid input`);
+      throw Error(
+        `You must provide a letter - "${letter}" is not a valid input`
+      );
+    }
     // Check if more than one letter was provided. throw an error if it is.
+    if (letter.length > 1) {
+      alert(`Must provide ONE letter - "${letter}" is not a valid input`);
+      throw Error(`Must provide ONE letter - "${letter}" is not a valid input`);
+    }
     // if it's a letter, convert it to lower case for consistency.
+    letter = letter.toLowerCase();
     // check if this.guesses includes the letter. Throw an error if it has been guessed already.
-    // add the new letter to the guesses array.
+    if (!this.guesses.includes(letter)) {
+      this.guesses.push(letter);
+    } else {
+      throw Error(`${letter} has been guessed already`);
+    }
     // check if the word includes the guessed letter:
-    //    if it's is call checkWin()
-    //    if it's not call onWrongGuess()
+    if (this.word.includes(letter)) {
+      //    if it's is call checkWin()
+      this.checkWin();
+    } else {
+      //    if it's not call onWrongGuess()
+      this.onWrongGuess();
+    }
   }
 
   checkWin() {
     // using the word and the guesses array, figure out how many remaining unknowns.
+    let remainingUnknowns = this.word.length;
+    for (let i = 0; i < this.guesses.length; i++) {
+      for (let j = 0; j < this.word.length; j++) {
+        if (this.word.charAt(j) == this.guesses[i]) {
+          remainingUnknowns--;
+        }
+      }
+    }
     // if zero, set both didWin, and isOver to true
+    if (remainingUnknowns === 0) {
+      this.isOver = true;
+      this.didWin = true;
+    }
   }
 
   /**
@@ -65,27 +109,56 @@ class Hangman {
    * drawHead, drawBody, drawRightArm, drawLeftArm, drawRightLeg, or drawLeftLeg.
    * if the number wrong guesses is 6, then also set isOver to true and didWin to false.
    */
-  onWrongGuess() {}
-
-  /**
-   * This function will return a string of the word placeholder
-   * It will have underscores in the correct number and places of the unguessed letters.
-   * i.e.: if the word is BOOK, and the letter O has been guessed, this would return _ O O _
-   */
-  getWordHolderText() {
-    return;
+  onWrongGuess() {
+    let wrongGuesses = 0;
+    for (let i = 0; i < this.guesses.length; i++) {
+      if (!this.word.includes(this.guesses[i])) {
+        wrongGuesses++;
+      }
+    }
+    if (wrongGuesses === 1) {
+      this.drawHead();
+    } else if (wrongGuesses === 2) {
+      this.drawBody();
+    } else if (wrongGuesses === 3) {
+      this.drawLeftArm();
+    } else if (wrongGuesses === 4) {
+      this.drawRightArm();
+    } else if (wrongGuesses === 5) {
+      this.drawLeftLeg();
+    } else if (wrongGuesses === 6) {
+      this.drawRightLeg();
+      this.isOver = true;
+      this.didWin = false;
+    }
   }
 
   /**
-   * This function returns a string of all the previous guesses, seperated by a comma
+   * This function will return a string of the word placeholder
+   * It will have underscores in the correct number and places of the un-guessed letters.
+   * i.e.: if the word is BOOK, and the letter O has been guessed, this would return _ O O _
+   */
+  getWordHolderText() {
+    let placeholder = "";
+    for (let i = 0; i < this.word.length; i++) {
+      if (this.guesses.includes(this.word[i]) === true) {
+        placeholder += `${this.word[i]}`;
+      } else {
+        placeholder += "_ ";
+      }
+    }
+    return placeholder.toUpperCase();
+  }
+
+  /**
+   * This function returns a string of all the previous guesses, separated by a comma
    * This would return something that looks like
    * (Guesses: A, B, C)
    * Hint: use the Array.prototype.join method.
    */
   getGuessesText() {
-    return ``;
+    return `Letters Guessed: ${this.guesses.join("   ").toUpperCase()}`;
   }
-
   /**
    * Clears the canvas
    */
@@ -103,15 +176,31 @@ class Hangman {
     this.ctx.fillRect(10, 410, 175, 10); // Base
   }
 
-  drawHead() {}
+  drawHead() {
+    this.ctx.beginPath();
+    this.ctx.arc(250, 95, 35, 0, Math.PI * 2, false);
+    this.ctx.stroke();
+  }
 
-  drawBody() {}
+  drawBody() {
+    this.ctx.beginPath();
+    this.ctx.fillRect(249, 130, 2, 125);
+    this.ctx.stroke();
+  }
 
-  drawLeftArm() {}
+  drawLeftArm() {
+    this.ctx.fillRect(185, 160, 65, 2);
+  }
 
-  drawRightArm() {}
+  drawRightArm() {
+    this.ctx.fillRect(251, 160, 65, 2);
+  }
 
-  drawLeftLeg() {}
+  drawLeftLeg() {
+    this.ctx.fillRect(185, 253, 65, 2);
+  }
 
-  drawRightLeg() {}
+  drawRightLeg() {
+    this.ctx.fillRect(251, 253, 65, 2);
+  }
 }
